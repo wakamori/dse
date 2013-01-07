@@ -366,22 +366,22 @@ static void DSE_ParseCommandOption(DSE* dse, int argc, char **argv)
 	}
 }
 
-static const char *DSE_formatScriptPath(char *buf, size_t bufsiz)
-{
-	const char *path = getenv("KONOHA_HOME");
-	const char *local = "/dse";
-	if(path == NULL) {
-		path = getenv("HOME");
-		local = "/.minikonoha/dse";
-	}
-	snprintf(buf, bufsiz, "%s%s/dse.k", path, local);
-#ifdef K_PREFIX
-	if(!HasFile(buf)) {
-		snprintf(buf, bufsiz, K_PREFIX "/lib/minikonoha/" K_VERSION "/dse/dse.k");
-	}
-#endif
-	return HasFile(buf) ? (const char *)buf : NULL;
-}
+//static const char *DSE_formatScriptPath(char *buf, size_t bufsiz)
+//{
+//	const char *path = getenv("KONOHA_HOME");
+//	const char *local = "/dse";
+//	if(path == NULL) {
+//		path = getenv("HOME");
+//		local = "/.minikonoha/dse";
+//	}
+//	snprintf(buf, bufsiz, "%s%s/dse.k", path, local);
+//#ifdef K_PREFIX
+//	if(!HasFile(buf)) {
+//		snprintf(buf, bufsiz, K_PREFIX "/lib/minikonoha/" K_VERSION "/dse/dse.k");
+//	}
+//#endif
+//	return HasFile(buf) ? (const char *)buf : NULL;
+//}
 
 static void DSE_defineConstData(DSE *dse, KonohaContext *kctx, Message *msg)
 {
@@ -410,6 +410,7 @@ KonohaContext* KonohaFactory_CreateKonoha(KonohaFactory *factory);
 int Konoha_Destroy(KonohaContext *kctx);
 
 #define PATH_SIZE 256
+#define DSE_LIB   "/usr/local/lib/dse"
 
 static void *DSE_dispatch(void *arg)
 {
@@ -418,8 +419,8 @@ static void *DSE_dispatch(void *arg)
 	KonohaFactory *factory = dse->factory;
 	Message *msg;
 	kbool_t ret;
-	char script[PATH_SIZE];
-	DSE_formatScriptPath(script, PATH_SIZE);
+//	char script[PATH_SIZE];
+//	DSE_formatScriptPath(script, PATH_SIZE);
 
 	while(true) {
 		pthread_mutex_lock(&scheduler->lock);
@@ -431,7 +432,7 @@ static void *DSE_dispatch(void *arg)
 		DEBUG_P("%s", msg->data);
 		KonohaContext* konoha = KonohaFactory_CreateKonoha(factory);
 		DSE_defineConstData(dse, konoha, msg);
-		ret = Konoha_LoadScript(konoha, script);
+		ret = Konoha_LoadScript(konoha, DSE_LIB "dse.k");
 		Konoha_Destroy(konoha);
 		Message_delete(msg);
 	}
