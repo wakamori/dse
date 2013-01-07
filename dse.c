@@ -410,7 +410,7 @@ KonohaContext* KonohaFactory_CreateKonoha(KonohaFactory *factory);
 int Konoha_Destroy(KonohaContext *kctx);
 
 #define PATH_SIZE 256
-#define DSE_LIB   "/usr/local/lib/dse"
+#define DSE_LIB   "/usr/local/lib/dse/"
 
 static void *DSE_dispatch(void *arg)
 {
