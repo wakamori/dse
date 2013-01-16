@@ -1,124 +1,56 @@
-// written by okamoto
-// reviewed by nakata
-
-import("jansson"); // Replace to konoha.json
-import("konoha.class");
-import("konoha.array");
-import("konoha.const");
-import("konoha.string");
-import("konoha.bytes");
-import("konoha.file");
-import("konoha.date");
-import("posix.process");
+import("Syntax.Null");
+import("JavaScript.String");
+import("JavaScript.Array");
+import("Type.Bytes");
+import("Type.File");
+import("Type.Json");
 import("dscript.subproc");
 
-const DTASK_SUCCESS = 0;
-
-class Logger {
-	Json data;
-
-	Logger() {
-		this.data = new Json();
-	}
-
-	void set(String key, String value) {
-		this.data.setString(key, value);
-	}
-
-	void out() {
-		String str = this.data.toString();
-		if(DSE_DEBUG == 1) {
-			System.p("log:" + str); // for debug
-		}
-		String command = "logger -t minikonoha " + str.replace("\"", "\\" + "\"").replace("(", "\\" + "(").replace(")", "\\" + ")");
-		System.system(command);
-	}
+void outputFile(String fileName, String content) {
+	FILE file = new FILE(fileName, "w");
+	file.write(content.toBytes());
+	file.close();
 }
 
-void executeScript() {
-	Json message = Json.parse(DSE_MESSAGE);
-	String cid = message.getString("CId");
-	String tid;
-	String name;
-	if(message.getString("event") == "D-Control") {
-		name = cid;
-		tid = "0";
+Json ExecuteScript(Json message) {
+	Json params = message.get("params");
+	if(params == null) return null;
+	String cid = params.getString("cid");
+	String scripttype = params.getString("scripttype");
+	String content = params.getString("script");
+	if(cid == null || scripttype == null || content == null) return null;
+	int tid;
+	if(scripttype == "D-Control") {
+		tid = 0;
 	}
-	else if(message.getString("event") == "D-Task") {
-		name = message.getString("Name");
-		tid = message.getString("TId");
-	}
-	else {
-		System.p("DSE handles only D-Script");
-		return;
-	}
-	String scriptname = cid + ":" + tid + ".k"
-	String script = message.getString("Script");
-	String option = message.getString("Option");
-	String To = message.getString("To");
-	String From = message.getString("From");
-	String[] strs = To.split(":");
-	String localhost = "\\" + "\"" + strs[0] + "\\" + "\"";
-	int    port = strs[1].toint();
-
-	FILE f = new FILE(scriptname, "w");
-	f.write(script.toBytes());
-	f.close();
-	if(DSE_DEBUG == 1) {
-		System.p("dse received script"); // for debug
+	else if(scripttype == "D-Task") {
+		tid = params.getInt("tid");
 	}
 
-	String command = "minikonoha"
-	if(DSE_DEBUG == 1) {
-		System.p("command:" + command); // for debug
-	}
-	String[] arglist = ("-DUSE_PRINT=1 -DHOST=" + localhost + " -DPORT=" + port + " -MSyslog -MDScriptConsole -Ikonoha.console -Idscript.shell " + scriptname).split(" ");
-	if(option == "Test") {
-		arglist.add("-MTraceVM");
-	}
-	if(DSE_DEBUG == 1) {
-		System.p("arglist:" + arglist); // for debug
-	}
+	String fileName = cid + ":" + tid + ".k";
+	outputFile(fileName, content);
+
+	String command = "minikonoha";
+	String[] arguments = ("" + fileName).split(" ");
 	SubProc sp = new SubProc(command);
-	sp.setArgumentList(arglist);
-
-	Logger startlog = new Logger();
-	startlog.set("Method", "StartTask");
-	startlog.set("CId", cid);
-	startlog.set("TId", tid);
-	startlog.set("State", "start");
-	startlog.set("ScriptName", scriptname);
-	startlog.set("Ip", To);
-	Date starttime = new Date();
-	startlog.set("Time", starttime.getTime().toString());
-	startlog.out();
-
+	sp.setArgumentList(arguments);
 	int result = sp.fg();
-	if(DSE_DEBUG == 1) {
-		System.p("result:" + result); // for debug
-	}
+}
 
-	Logger endlog = new Logger();
-	endlog.set("Method", "EndTask");
-	endlog.set("State", "end");
-	endlog.set("CId", cid);
-	endlog.set("TId", tid);
+Json CheckChildAlive(Json message) {
+}
 
-	if(result == DTASK_SUCCESS) {
-		endlog.set("Result", "success");
+void main() {
+//	Json request = Json.parse("{\"method\":\"ExecuteScript\", \"params\":{\"cid\":\"hoge\", \"scripttype\":\"D-Control\",\"script\":\"System.p(\\\"hoge\\\");\"}}");   this is stub
+	Json request = Json.parse(DSE_MESSAGE);
+	Json response = null;
+	String method = request.getString("method");
+	if(method == "ExecuteScript") {
+		response = ExecuteScript(request);
 	}
-	else {
-		endlog.set("Result", "error");
-	}
-
-	endlog.set("ScriptName", scriptname);
-	endlog.set("Ip", To);
-	Date endtime = new Date();
-	endlog.set("Time", endtime.getTime().toString());
-	endlog.out();
-	if(DSE_DEBUG == 1) {
-		System.p("dse executed script"); // for debug
+	else if(method == "CheckChildAlive") {
+		response = CheckChildAlive(request);
 	}
 }
 
-executeScript();
+main();
