@@ -42,7 +42,7 @@ Json CheckChildAlive(Json message) {
 
 void main() {
 //	Json request = Json.parse("{\"method\":\"ExecuteScript\", \"params\":{\"cid\":\"hoge\", \"scripttype\":\"D-Control\",\"script\":\"System.p(\\\"hoge\\\");\"}}");   this is stub
-	Json request = Json.parse(DSE_MESSAGE);
+	Json request = Json.parse(DSE_REQUEST);
 	Json response = null;
 	String method = request.getString("method");
 	if(method == "ExecuteScript") {

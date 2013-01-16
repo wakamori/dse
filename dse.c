@@ -387,7 +387,7 @@ static void DSE_defineConstData(DSE *dse, KonohaContext *kctx, Message *msg)
 {
 	if(msg != NULL) {
 		KDEFINE_TEXT_CONST TextData[] = {
-			{"DSE_MESSAGE", VirtualType_Text, (char *)msg->data},
+			{"DSE_REQUEST", VirtualType_Text, (char *)msg->data},
 			{"DSE_SCRIPT_DIR", VirtualType_Text, dse->scriptdir},
 			{}
 		};
