@@ -18,6 +18,6 @@ endif(HAVE_MINIKONOHA)
 target_link_libraries(dse ${DSE_EXTRA_LIBRARY})
 
 set(DSE_SCRIPT_DIR lib/dse)
-set(DSE_SCRIPT_CODE script/dse.k)
+set(DSE_SCRIPT_CODE script/core.k)
 install(TARGETS dse DESTINATION bin)
 install(FILES ${DSE_SCRIPT_CODE} DESTINATION ${DSE_SCRIPT_DIR})
