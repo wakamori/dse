@@ -401,7 +401,7 @@ static void DSE_defineConstData(DSE *dse, KonohaContext *kctx, Message *msg)
 		KLIB kNameSpace_LoadConstData(kctx, KNULL(NameSpace), KConst_(TextData), 0);
 	}
 	KDEFINE_INT_CONST IntData[] = {
-		{"DSE_DEBUG", KType_int, verbose_debug}, {}
+		{"DSE_DEBUG", KType_Int, verbose_debug}, {}
 	};
 	KLIB kNameSpace_LoadConstData(kctx, KNULL(NameSpace), KConst_(IntData), 0);
 }
@@ -432,7 +432,7 @@ static void *DSE_dispatch(void *arg)
 		DEBUG_P("%s", msg->data);
 		KonohaContext* konoha = KonohaFactory_CreateKonoha(factory);
 		DSE_defineConstData(dse, konoha, msg);
-		ret = Konoha_LoadScript(konoha, DSE_LIB "dse.k");
+		ret = Konoha_LoadScript(konoha, DSE_LIB "core.k");
 		Konoha_Destroy(konoha);
 		Message_delete(msg);
 	}
