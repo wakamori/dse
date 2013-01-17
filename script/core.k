@@ -35,6 +35,9 @@ Json ExecuteScript(Json message) {
 	SubProc sp = new SubProc(command);
 	sp.setArgumentList(arguments);
 	int result = sp.fg();
+
+	Json response = new Json();
+	return response;
 }
 
 Json CheckChildAlive(Json message) {
