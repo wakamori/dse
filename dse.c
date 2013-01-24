@@ -475,7 +475,7 @@ static void DSE_requestHandler(struct evhttp_request *request, void *arg)
 
 static void DSE_start(DSE *dse)
 {
-	if(evhttp_bind_socket(dse->httpd, "127.0.0.1", dse->port) < 0){
+	if(evhttp_bind_socket(dse->httpd, "0.0.0.0", dse->port) < 0){
 		DEBUG_ABORT();
 	}
 
