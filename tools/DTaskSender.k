@@ -28,7 +28,7 @@ void sendDTask() {
 	request.set("params", params);
 
 	Curl curl = new Curl();
-	curl.setOpt(CURLOPT_URL, "http://" + IP);
+	curl.setOpt(CURLOPT_URL, IP);
 	curl.setOpt(CURLOPT_POSTFIELDS, request.toString());
 	curl.perform();
 }
