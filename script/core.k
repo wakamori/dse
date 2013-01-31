@@ -4,6 +4,7 @@ import("JavaScript.Array");
 import("Type.Bytes");
 import("Type.File");
 import("Type.Json");
+import("Lib.Curl");
 import("dscript.subproc");
 
 void outputFile(String fileName, String content) {
@@ -12,13 +13,14 @@ void outputFile(String fileName, String content) {
 	file.close();
 }
 
-Json ExecuteScript(Json message) {
-	Json params = message.get("params");
+Json ExecuteScript(Json request) {
+	Json params = request.get("params");
 	if(params == null) return null;
 	String cid = params.getString("cid");
 	String scripttype = params.getString("scripttype");
 	String content = params.getString("script");
-	if(cid == null || scripttype == null || content == null) return null;
+	String from = params.getString("from");
+	if(cid == null || scripttype == null || content == null || from == null) return null;
 	int tid;
 	if(scripttype == "D-Control") {
 		tid = 0;
@@ -37,22 +39,35 @@ Json ExecuteScript(Json message) {
 	int result = sp.fg();
 
 	Json response = new Json();
+	response.setString("event", "dse");
+	response.setString("to", from);
+	response.setString("cid", cid);
+	response.setInt("tid", tid);
 	return response;
 }
 
-Json CheckChildAlive(Json message) {
+Json CheckChildAlive(Json request) {
+	return new Json();
 }
 
 void main() {
-//	Json request = Json.parse("{\"method\":\"ExecuteScript\", \"params\":{\"cid\":\"hoge\", \"scripttype\":\"D-Control\",\"script\":\"System.p(\\\"hoge\\\");\"}}");   this is stub
 	Json request = Json.parse(DSE_REQUEST);
 	Json response = null;
+
 	String method = request.getString("method");
 	if(method == "ExecuteScript") {
 		response = ExecuteScript(request);
 	}
 	else if(method == "CheckChildAlive") {
 		response = CheckChildAlive(request);
+	}
+
+	String to = response.getString("to");
+	if(to != null) {
+		Curl curl = new Curl();
+		curl.setOpt(CURLOPT_URL, to);
+		curl.setOpt(CURLOPT_POSTFIELDS, response.toString());
+		curl.perform();
 	}
 }
 

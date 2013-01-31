@@ -5,6 +5,9 @@ import("Type.Bytes");
 import("Type.File");
 import("Type.Json");
 import("Lib.Curl");
+import("Syntax.CStyleWhile");
+import("MiniKonoha.EventListener");
+import("posix.process");
 
 String readFile(String fileName) {
 	int BUFSIZ = 4096;
@@ -16,21 +19,34 @@ String readFile(String fileName) {
 	return new String(buf);
 }
 
+void dumpResponse(Event e) {
+	System.p("cid : " + e.getProperty("cid"));
+	System.p("tid : " + e.getInt("tid"));
+}
+
 void sendDTask() {
-	String content = readFile(SCRIPT).replace("\"", "\\\"");
+	EventHandler.setCallBack("dse", dumpResponse);
+	HttpEventListener.start("0.0.0.0", 8090);
+
+	String script = readFile(SCRIPT).replace("\"", "\\\"");
 
 	Json request = new Json();
 	request.setString("method","ExecuteScript");
 	Json params = new Json();
 	params.setString("cid", "test");
 	params.setString("scripttype", "D-Control");
-	params.setString("script", content);
+	params.setString("script", script);
+	params.setString("from", "http://0.0.0.0:8090");
 	request.set("params", params);
 
 	Curl curl = new Curl();
 	curl.setOpt(CURLOPT_URL, IP);
 	curl.setOpt(CURLOPT_POSTFIELDS, request.toString());
 	curl.perform();
+
+	while(true) {
+		System.usleep(10000);
+	}
 }
 
 sendDTask();
