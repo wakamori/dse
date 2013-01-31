@@ -21,7 +21,7 @@ Json ExecuteScript(Json request) {
 	String cid = params.getString("cid");
 	String scripttype = params.getString("scripttype");
 	String content = params.getString("script");
-	if(cid == null || scripttype == null || content == null || from == null) return null;
+	if(cid == null || scripttype == null || content == null) return null;
 
 	int tid;
 	if(scripttype == "D-Control") {
