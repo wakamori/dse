@@ -15,12 +15,14 @@ void outputFile(String fileName, String content) {
 
 Json ExecuteScript(Json request) {
 	Json params = request.get("params");
-	if(params == null) return null;
+	String from = request.getString("from");
+	if(params == null || from == null) return null;
+
 	String cid = params.getString("cid");
 	String scripttype = params.getString("scripttype");
 	String content = params.getString("script");
-	String from = params.getString("from");
 	if(cid == null || scripttype == null || content == null || from == null) return null;
+
 	int tid;
 	if(scripttype == "D-Control") {
 		tid = 0;
@@ -36,13 +38,28 @@ Json ExecuteScript(Json request) {
 	String[] arguments = ("" + fileName).split(" ");
 	SubProc sp = new SubProc(command);
 	sp.setArgumentList(arguments);
-	int result = sp.fg();
+	sp.bg();
+	String[] out = sp.communicate("");
+	int ret = sp.getStatus();
+//	System.p("stdout : " + out[0]); // for debug
+//	System.p("stderr : " + out[1]); // for debug
+//	System.p("ret    : " + ret);    // for debug
 
 	Json response = new Json();
 	response.setString("event", "dse");
 	response.setString("to", from);
-	response.setString("cid", cid);
-	response.setInt("tid", tid);
+	Json result = new Json();
+	result.setInt("tid", tid);
+	result.setString("cid", cid);
+	result.setInt("code", ret);
+	result.setString("stdout", out[0]);
+	if(ret == 0) {
+		response.set("result", result);
+	}
+	else {
+		result.setString("stderr", out[1]);
+		response.set("error", result);
+	}
 	return response;
 }
 
@@ -55,6 +72,7 @@ void main() {
 	Json response = null;
 
 	String method = request.getString("method");
+//	System.p("method : " + method); // for debug
 	if(method == "ExecuteScript") {
 		response = ExecuteScript(request);
 	}
@@ -62,6 +80,7 @@ void main() {
 		response = CheckChildAlive(request);
 	}
 
+	response.setString("jsonrpc", "2.0");
 	String to = response.getString("to");
 	if(to != null) {
 		Curl curl = new Curl();

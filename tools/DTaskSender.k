@@ -31,12 +31,13 @@ void sendDTask() {
 	String script = readFile(SCRIPT).replace("\"", "\\\"");
 
 	Json request = new Json();
+	request.setString("jsonrpc", "2.0");
 	request.setString("method","ExecuteScript");
+	request.setString("from", "http://0.0.0.0:8090");
 	Json params = new Json();
 	params.setString("cid", "test");
 	params.setString("scripttype", "D-Control");
 	params.setString("script", script);
-	params.setString("from", "http://0.0.0.0:8090");
 	request.set("params", params);
 
 	Curl curl = new Curl();
