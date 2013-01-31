@@ -48,18 +48,11 @@ Json ExecuteScript(Json request) {
 	Json response = new Json();
 	response.setString("event", "dse");
 	response.setString("to", from);
-	Json result = new Json();
-	result.setInt("tid", tid);
-	result.setString("cid", cid);
-	result.setInt("code", ret);
-	result.setString("stdout", out[0]);
-	if(ret == 0) {
-		response.set("result", result);
-	}
-	else {
-		result.setString("stderr", out[1]);
-		response.set("error", result);
-	}
+	response.setString("cid", cid);
+	response.setInt("tid", tid);
+	response.setInt("code", ret);
+//	response.setString("stdout", out[0]); // TODO
+//	response.setString("stderr", out[1]); // TODO
 	return response;
 }
 
@@ -84,7 +77,9 @@ void main() {
 	String to = response.getString("to");
 	if(to != null) {
 		Curl curl = new Curl();
+//		System.p("to : " + to); // for debug
 		curl.setOpt(CURLOPT_URL, to);
+//		System.p("response : " + response); // for debug
 		curl.setOpt(CURLOPT_POSTFIELDS, response.toString());
 		curl.perform();
 	}

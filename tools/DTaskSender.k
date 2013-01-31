@@ -20,8 +20,11 @@ String readFile(String fileName) {
 }
 
 void dumpResponse(Event e) {
-	System.p("cid : " + e.getProperty("cid"));
-	System.p("tid : " + e.getInt("tid"));
+	System.p("cid : "    + e.getProperty("cid"));
+	System.p("tid : "    + e.getInt("tid"));
+	System.p("code : "   + e.getInt("code"));
+	System.p("stdout : " + e.getProperty("stdout"));
+	System.p("stderr : " + e.getProperty("stderr"));
 }
 
 void sendDTask() {
