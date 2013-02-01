@@ -52,12 +52,16 @@ Json ExecuteScript(Json request) {
 	response.setString("cid", cid);
 	response.setInt("tid", tid);
 	response.setInt("code", ret);
-//	response.setString("stdout", out[0]); // TODO
-//	response.setString("stderr", out[1]); // TODO
+//	response.setString("stdout", out[0]); TODO
+//	response.setString("stderr", out[1]); TODO
 	return response;
 }
 
-Json CheckChildAlive(Json request) {
+Json IsDseAlive(Json request) {
+	return new Json();
+}
+
+Json CheckSlaveDsesStatus(Json request) {
 	return new Json();
 }
 
@@ -67,11 +71,15 @@ void main() {
 
 	String method = request.getString("method");
 //	System.p("method : " + method); // for debug
+// TODO replace following code to Map[func]
 	if(method == "ExecuteScript") {
 		response = ExecuteScript(request);
 	}
-	else if(method == "CheckChildAlive") {
-		response = CheckChildAlive(request);
+	else if(method == "IsDseAlive") {
+		response = IsDseAlive(request);
+	}
+	else if(method == "CheckSlaveDsesStatus") {
+		response = CheckSlaveDsesStatus(request);
 	}
 
 	response.setString("jsonrpc", "2.0");
