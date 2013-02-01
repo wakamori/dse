@@ -34,7 +34,7 @@ Json ExecuteScript(Json request) {
 	String fileName = cid + ":" + tid + ".k";
 	outputFile(fileName, content);
 
-	String command = "minikonoha";
+	String command = "/usr/local/bin/minikonoha";
 	String[] arguments = ("" + fileName).split(" ");
 	SubProc sp = new SubProc(command);
 	sp.setArgumentList(arguments);
