@@ -32,10 +32,11 @@ Json ExecuteScript(Json request) {
 	}
 
 	String fileName = cid + ":" + tid + ".k";
-	outputFile(fileName, content);
+	String filePath = DSE_SCRIPT_DIR + "/" + fileName;
+	outputFile(filePath, content);
 
 	String command = "/usr/local/bin/minikonoha";
-	String[] arguments = ("" + fileName).split(" ");
+	String[] arguments = filePath.split(" ");
 	SubProc sp = new SubProc(command);
 	sp.setArgumentList(arguments);
 	sp.bg();

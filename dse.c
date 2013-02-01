@@ -308,7 +308,7 @@ static Message *Scheduler_dequeue(Scheduler *scheduler)
 
 static DSE *DSE_new(void)
 {
-	static const char scriptdir[] = "./";
+	static const char scriptdir[] = ".";
 	DSE *dse = (DSE *)dse_malloc(sizeof(DSE));
 	dse->port = 8080;
 	dse->threadsize = 16;
@@ -329,7 +329,7 @@ static struct option long_options2[] = {
 	{"verbose:code",    no_argument,       &verbose_code,  1},   // for debug
 	{"port",            required_argument, 0,              'p'}, // port
 	{"threadsize",      required_argument, 0,              't'}, // thread size
-	{"scriptdir",       required_argument, 0,              'D'}, // directory of the acquired script
+	{"scriptdir",       required_argument, 0,              'd'}, // directory of the acquired script
 	{NULL, 0, 0, 0},  /* sentinel */
 };
 
@@ -339,7 +339,7 @@ static void DSE_ParseCommandOption(DSE* dse, int argc, char **argv)
 
 	while (1) {
 		int option_index = 0;
-		int c = getopt_long (argc, argv, "p:t:D:", long_options2, &option_index);
+		int c = getopt_long (argc, argv, "p:t:d:", long_options2, &option_index);
 		if(c == -1) break; /* Detect the end of the options. */
 		switch (c) {
 			case 'p':
@@ -350,13 +350,13 @@ static void DSE_ParseCommandOption(DSE* dse, int argc, char **argv)
 				dse->threadsize = (int)strtol(optarg, &e, 10);
 				break;
 
-			case 'D':
+			case 'd':
 				dse->scriptdir = optarg;
 				break;
 
 			case '?':
 				/* getopt_long already printed an error message. */
-				fprintf(stderr, "Usage: COMMAND [ --verbose ] [ --verbose:sugar ] [ --verbose:code ] [ --port | -p ] port [ --threadsize | -t ] size [ --scriptdir | -D ] directory\n");
+				fprintf(stderr, "Usage: COMMAND [ --verbose ] [ --verbose:sugar ] [ --verbose:code ] [ --port | -p ] port [ --threadsize | -t ] size [ --scriptdir | -d ] directory\n");
 				break;
 
 			default:
