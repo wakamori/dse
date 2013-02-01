@@ -453,6 +453,7 @@ static void DSE_requestHandler(struct evhttp_request *request, void *arg)
 		case EVHTTP_REQ_POST :
 			// now, we fetch message
 			requestLine = evbuffer_pullup(body, -1);
+			requestLine[len] = '\0';
 			msg = Message_new(requestLine, len);
 			pthread_mutex_lock(&scheduler->lock);
 			if(Scheduler_enqueue(scheduler, msg)) {
