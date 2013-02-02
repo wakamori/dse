@@ -52,8 +52,8 @@ Json ExecuteScript(Json request) {
 	response.setString("cid", cid);
 	response.setInt("tid", tid);
 	response.setInt("code", ret);
-//	response.setString("stdout", out[0]); TODO
-//	response.setString("stderr", out[1]); TODO
+	response.setString("stdout", out[0].replace("\"", "\\\"").replace("\n", "\\n"));
+	response.setString("stderr", out[1].replace("\"", "\\\"").replace("\n", "\\n"));
 	return response;
 }
 
