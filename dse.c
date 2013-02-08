@@ -22,9 +22,9 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ***************************************************************************/
 
-#include <minikonoha/minikonoha.h>
-#include <minikonoha/sugar.h>
-#include <minikonoha/klib.h>
+#include <konoha/konoha.h>
+#include <konoha/sugar.h>
+#include <konoha/klib.h>
 
 #ifdef __GNUC__
 #include <getopt.h>
@@ -203,8 +203,8 @@ static void DSE_delete(DSE *dse);
 // -------------------------------------------------------------------------
 // getopt
 
-#include <minikonoha/platform.h>
-//#include <minikonoha/libcode/minishell.h>
+#include <konoha/platform.h>
+//#include <konoha/libcode/minishell.h>
 
 // -------------------------------------------------------------------------
 // KonohaContext
@@ -372,12 +372,12 @@ static void DSE_ParseCommandOption(DSE* dse, int argc, char **argv)
 //	const char *local = "/dse";
 //	if(path == NULL) {
 //		path = getenv("HOME");
-//		local = "/.minikonoha/dse";
+//		local = "/.konoha/dse";
 //	}
 //	snprintf(buf, bufsiz, "%s%s/dse.k", path, local);
 //#ifdef K_PREFIX
 //	if(!HasFile(buf)) {
-//		snprintf(buf, bufsiz, K_PREFIX "/lib/minikonoha/" K_VERSION "/dse/dse.k");
+//		snprintf(buf, bufsiz, K_PREFIX "/lib/konoha/" K_VERSION "/dse/dse.k");
 //	}
 //#endif
 //	return HasFile(buf) ? (const char *)buf : NULL;

@@ -35,7 +35,7 @@ Json ExecuteScript(Json request) {
 	String filePath = DSE_SCRIPT_DIR + "/" + fileName;
 	outputFile(filePath, content);
 
-	String command = "/usr/local/bin/minikonoha";
+	String command = "/usr/local/bin/konoha";
 	String[] arguments = filePath.split(" ");
 	SubProc sp = new SubProc(command);
 	sp.setArgumentList(arguments);

@@ -1,4 +1,4 @@
-#!/usr/local/bin/minikonoha
+#!/usr/local/bin/konoha
 
 import("JavaScript.String");
 import("Type.Bytes");
