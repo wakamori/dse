@@ -203,8 +203,8 @@ static void DSE_delete(DSE *dse);
 // -------------------------------------------------------------------------
 // getopt
 
-#include <konoha/platform.h>
-//#include <konoha/libcode/minishell.h>
+#include <konoha3/platform.h>
+//#include <konoha3/libcode/minishell.h>
 
 // -------------------------------------------------------------------------
 // KonohaContext
