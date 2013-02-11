@@ -45,9 +45,9 @@ Json ExecuteScript(Json request) {
 	sp.bg();
 	String[] out = sp.communicate("");
 	int ret = sp.getStatus();
-//	System.p("stdout : " + out[0]); // for debug
-//	System.p("stderr : " + out[1]); // for debug
-//	System.p("ret    : " + ret);    // for debug
+	System.p("stdout : " + out[0]); // for debug
+	System.p("stderr : " + out[1]); // for debug
+	System.p("ret    : " + ret);    // for debug
 
 	Json response = new Json();
 	response.setString("event", "dse");
