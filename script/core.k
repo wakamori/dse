@@ -1,4 +1,5 @@
 import("Syntax.Null");
+import("Syntax.ShellStyle");
 import("JavaScript.String");
 import("JavaScript.Array");
 import("Type.Bytes");
@@ -6,6 +7,8 @@ import("Type.File");
 import("Type.Json");
 import("Lib.Curl");
 import("dscript.subproc");
+
+load("/usr/local/lib/dse/RestartApache.k");
 
 void outputFile(String fileName, String content) {
 	FILE file = new FILE(fileName, "w");
@@ -80,6 +83,9 @@ void main() {
 	}
 	else if(method == "CheckSlaveDsesStatus") {
 		response = CheckSlaveDsesStatus(request);
+	}
+	else if(method == "RestartApache") {
+		response = RestartApache(request);
 	}
 
 	response.setString("jsonrpc", "2.0");
