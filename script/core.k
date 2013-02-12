@@ -40,7 +40,7 @@ Json ExecuteScript(Json request) {
 
 	String command = "/usr/local/bin/konoha";
 	String[] arguments = filePath.split(" ");
-	arguments.add("-DEXECUTE_CMD=1");
+	arguments.add("-DOUTPUT_CMD=1");
 	SubProc sp = new SubProc(command);
 	sp.setArgumentList(arguments);
 	sp.bg();
